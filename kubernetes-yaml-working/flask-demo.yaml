@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-demo
+spec:
+  selector:
+    matchLabels:
+      app: flask-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flask-demo
+    spec:
+      containers:
+      - name: flask-demo
+        image: aryamanps/flask-docker-demo-app:blu
+        env:
+        - name: FLASK_ENV
+          value: "development"
+        - name: APP_SETTINGS
+          value: "project.config.DevelopmentConfig"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+  
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-demo
+  labels:
+    service: flask-demo
+spec:
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: "TCP"
+  selector:
+    app: flask-demo
