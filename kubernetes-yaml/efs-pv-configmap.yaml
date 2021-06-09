@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: ###NAMESPACE###
+  name: kube8r-efs-provisioner
+data:
+  file.system.id: ###FILE_SYSTEM_ID###
+  aws.region: ###AWS_REGION###
+  provisioner.name: ###PV_DOMAIN###/aws-efs 
+  dns.name: ""

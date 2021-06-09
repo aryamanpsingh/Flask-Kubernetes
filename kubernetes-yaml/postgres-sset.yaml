@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  namespace: ###NAMESPACE###
   name: postgres-###APP_NAME###
   labels:
     name: postgres-###APP_NAME###
@@ -26,13 +27,14 @@ spec:
             - configMapRef:
                 name: postgres-config
           volumeMounts:
-            - mountPath: /var/lib/postgresql
-              name: postgredb-###APP_NAME###
-      volumeClaimTemplates:
-        - metadata:
-            name: postgredb-###APP_NAME###
-          spec:
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 1Gi
+            - name: postgres-volume-claim
+  volumeClaimTemplates: 
+  - metadata:
+      namespace: ###NAMESPACE###
+      name: postgres-volume-claim
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: kube8r-###APP_NAME###-aws-efs
+      resources:
+        requests:
+          storage: 100Mi

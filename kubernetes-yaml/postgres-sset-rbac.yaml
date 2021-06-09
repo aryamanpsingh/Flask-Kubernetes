@@ -1,0 +1,24 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: ###NAMESPACE###
+  name: postgres-pod-read
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: postgres-pod-read
+  namespace: ###NAMESPACE###
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: ###NAMESPACE###
+roleRef:
+  kind: ClusterRole
+  name: postgres-pod-read
+  apiGroup: rbac.authorization.k8s.io

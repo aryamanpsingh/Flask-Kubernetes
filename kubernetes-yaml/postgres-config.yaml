@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  namespace: ###NAMESPACE###
   name: postgres-config
   labels:
     app: ###APP_NAME###

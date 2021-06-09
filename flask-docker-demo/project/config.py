@@ -2,7 +2,7 @@ import os
 
 POSTGRES_USER = 'postgres'
 POSTGRES_PASSWORD = 'postgres'
-DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres:5432/employees'
+DATABASE_URL = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres-test2:5432/employees'
 
 
 class BaseConfig:
