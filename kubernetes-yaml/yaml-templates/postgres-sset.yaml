@@ -27,7 +27,8 @@ spec:
             - configMapRef:
                 name: postgres-config
           volumeMounts:
-            - name: postgres-volume-claim
+            - name: pv-volume
+            - mountPath: /persistentvolumes
   volumeClaimTemplates:
   - metadata:
       name: ###APP_NAME###-efs
