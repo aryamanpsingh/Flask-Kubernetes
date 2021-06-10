@@ -28,13 +28,13 @@ spec:
                 name: postgres-config
           volumeMounts:
             - name: postgres-volume-claim
-  volumeClaimTemplates: 
+  volumeClaimTemplates:
   - metadata:
-      namespace: ###NAMESPACE###
-      name: postgres-volume-claim
+      name: ###APP_NAME###-efs
+      annotations:
+        volume.beta.kubernetes.io/storage-class: ###APP_NAME###-efs
     spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: kube8r-###APP_NAME###-aws-efs
+      accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 100Mi
+          storage: 1Mi

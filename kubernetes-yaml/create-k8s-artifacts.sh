@@ -32,6 +32,7 @@ sed -i "s/###PV_DOMAIN###/$PV_DOMAIN/g" efs-storageclass.yaml
 kubectl apply -f efs-storageclass.yaml
 
 echo "Creating pv provisioner"
+sed -i "s/###APP_NAME###/$APP_NAME/g" efs-pv-provisioner.yaml
 sed -i "s/###NAMESPACE###/$NAMESPACE/g" efs-pv-provisioner.yaml
 sed -i "s/###NFS_SERVER###/$NFS_SERVER/g" efs-pv-provisioner.yaml
 
@@ -51,7 +52,7 @@ sed -i "s/###DB_USER###/$DB_USER/g" postgres-configmap.yaml
 sed -i "s/###DB_PASS###/$DB_PASS/g" postgres-configmap.yaml
 sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-configmap.yaml
 
-kubectl apply -f postgres-config.yaml
+kubectl apply -f postgres-configmap.yaml
 
 echo "Creating statefulset"
 sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-sset.yaml
@@ -70,5 +71,5 @@ kubectl apply -f postgres-service.yaml
 echo "Creating statefulset rbac"
 sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-sset-rbac.yaml
 
-kubectl apply -f postgres-sset-rbac.yaml'
+kubectl apply -f postgres-sset-rbac.yaml
 
