@@ -1,10 +1,7 @@
-cp $k8sTemplatesPath/postgres-configmap.yaml .
-cp $k8sTemplatesPath/postgres-sset.yaml .
-cp $k8sTemplatesPath/postgres-service.yaml .
+cp $k8sTemplatesPath/postgres-secret.yaml .
+cp $k8sTemplatesPath/postgres-setup.yaml .
 
 cp $k8sTemplatesPath/efs-pv-provisioner.yaml .
-cp $k8sTemplatesPath/postgres-sset-rbac.yaml .
-
 cp $k8sTemplatesPath/efs-pv-configmap.yaml .
 cp $k8sTemplatesPath/efs-storageclass.yaml .
 cp $k8sTemplatesPath/efs-pv-rbac.yaml .
@@ -45,31 +42,20 @@ kubectl apply -f postgres-pv.yaml
 echo "Creating persistent volume claim"
 kubectl apply -f postgres-pvclaim.yaml
 '
-echo "Creating config map"
-sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-configmap.yaml
-sed -i "s/###DB_NAME###/$DB_NAME/g" postgres-configmap.yaml
-sed -i "s/###DB_USER###/$DB_USER/g" postgres-configmap.yaml
-sed -i "s/###DB_PASS###/$DB_PASS/g" postgres-configmap.yaml
-sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-configmap.yaml
+echo "Installing KubeGres Operator"
+kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.6/kubegres.yaml
+
+echo "Creating postgres secret"
+sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-secret.yaml
+sed -i "s/###DB_USER###/$DB_USER/g" postgres-secret.yaml
+sed -i "s/###DB_PASS###/$DB_PASS/g" postgres-secret.yaml
+sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-secret.yaml
 
 kubectl apply -f postgres-configmap.yaml
 
-echo "Creating statefulset"
-sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-sset.yaml
-sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-sset.yaml
-sed -i "s/###POSTGRES_VERSION###/$POSTGRES_VERSION/g" postgres-sset.yaml
+echo "Setting up postgres"
+sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-setup.yaml
+sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-setup.yaml
+sed -i "s/###POSTGRES_VERSION###/$POSTGRES_VERSION/g" postgres-setup.yaml
 
-kubectl apply -f postgres-sset.yaml
-
-
-echo "Creating service"
-sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-service.yaml
-sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-service.yaml
-
-kubectl apply -f postgres-service.yaml
-
-echo "Creating statefulset rbac"
-sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-sset-rbac.yaml
-
-kubectl apply -f postgres-sset-rbac.yaml
-
+kubectl apply -f postgres-setup.yaml
