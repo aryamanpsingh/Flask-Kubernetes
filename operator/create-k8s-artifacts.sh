@@ -8,7 +8,7 @@ cp $k8sTemplatesPath/efs-pv-rbac.yaml .
 
 echo "Namespace: $NAMESPACE"
 export KUBECONFIG="/home/ec2-user/.kube/config"
-
+kubectl create ns $NAMESPACE
 echo "Creating pv config map"
 sed -i "s/###NAMESPACE###/$NAMESPACE/g" efs-pv-configmap.yaml
 sed -i "s/###FILE_SYSTEM_ID###/$FILE_SYSTEM_ID/g" efs-pv-configmap.yaml
