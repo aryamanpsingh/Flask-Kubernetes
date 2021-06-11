@@ -1,0 +1,28 @@
+apiVersion: kubegres.reactive-tech.io/v1
+kind: Kubegres
+metadata:
+  name: postgres-###APP_NAME###
+  namespace: ###NAMESPACE###
+
+spec:
+
+   replicas: 3
+   image: postgres:###POSTGRES_VERSION###
+
+   database:
+      size: 200Mi
+      storageClassName: kube8r-###APP_NAME###-aws-efs
+      volumeMount: /persistentvolumes
+
+   env:
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+           secretKeyRef:
+              name: ###APP_NAME###-secret
+              key: superUserPassword
+
+      - name: POSTGRES_REPLICATION_PASSWORD
+        valueFrom:
+           secretKeyRef:
+              name: ###APP_NAME###-secret
+              key: replicationUserPassword

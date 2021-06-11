@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: kube8r-###APP_NAME###-aws-efs
+provisioner: ###PV_DOMAIN###/aws-efs
+parameters:
+  gidMin: "2048" 
+  gidMax: "2147483647" 
+  gidAllocate: "true"

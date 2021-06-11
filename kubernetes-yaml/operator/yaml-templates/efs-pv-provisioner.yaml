@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+  namespace: ###NAMESPACE###
+  name: kube8r-efs-provisioner
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        app: kube8r-efs-provisioner
+  strategy:
+    type: Recreate 
+  template:
+    metadata:
+      labels:
+        app: kube8r-efs-provisioner
+    spec:
+      serviceAccount: kube8r-efs-provisioner
+      containers:
+        - name: kube8r-efs-provisioner
+          image: quay.io/external_storage/efs-provisioner:latest
+          env:
+            - name: FILE_SYSTEM_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: kube8r-efs-provisioner
+                  key: file.system.id
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: kube8r-efs-provisioner
+                  key: aws.region
+            - name: DNS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kube8r-efs-provisioner
+                  key: dns.name
+                  optional: true
+            - name: PROVISIONER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kube8r-efs-provisioner
+                  key: provisioner.name
+          volumeMounts:
+            - name: pv-volume
+              mountPath: /persistentvolumes
+      volumes:
+        - name: pv-volume
+          nfs:
+            server: ###NFS_SERVER###
+            path: /
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ###APP_NAME###-efs
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "###APP_NAME###-efs"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
+---
