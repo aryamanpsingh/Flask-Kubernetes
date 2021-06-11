@@ -51,7 +51,7 @@ sed -i "s/###DB_USER###/$DB_USER/g" postgres-secret.yaml
 sed -i "s/###DB_PASS###/$DB_PASS/g" postgres-secret.yaml
 sed -i "s/###APP_NAME###/$APP_NAME/g" postgres-secret.yaml
 
-kubectl apply -f postgres-configmap.yaml
+kubectl apply -f postgres-secret.yaml
 
 echo "Setting up postgres"
 sed -i "s/###NAMESPACE###/$NAMESPACE/g" postgres-setup.yaml
