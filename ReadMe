@@ -1,1 +1,4 @@
-A simple project which deploys a Flask app using Docker and Kubernetes.
+A plugin to automate the migration of a legacy Flask and PostgreSQL app to a scalable and highly-available Kubernetes cluster.
+The repository contains 2 implementations -
+  - Manually definition and creation of the necessary postgres artifacts, 
+  - Using operator Kubegres to set up the Postgres stateful sets.
